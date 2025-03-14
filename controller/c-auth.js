@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs')
 const { StatusCodes } = require('http-status-codes')
 const jwt = require('jsonwebtoken')
 const Unauthorized = require('../errors/unauth')
+//authentication class
 class Authentication {
     //register functin
     async register(req, res) {
@@ -35,4 +36,4 @@ class Authentication {
     }
 }
 
-module.exports = Authentication;
+module.exports = new Authentication;
