@@ -18,8 +18,9 @@ const url = process.env.MONGO_URL
 //body parase
 app.use(express.json())
 
+
 //route
-app.use('/api/v1/auth',authentication , route)
+app.use('/api/v1/auth', route)
 
 //middleware
 app.use(errorHandling)

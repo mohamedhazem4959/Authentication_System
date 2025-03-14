@@ -9,29 +9,30 @@ const Unauthorized = require('../errors/unauth')
 class Authentication {
     //register functin
     async register(req, res) {
+        const { email } = req.body;
         const vaildEmail = await userSchema.findOne({ email });
         if (vaildEmail) {
             throw new BadRequest('this email is already registerd!')
         }
         const user = await userSchema.create({ ...req.body })
-        const token = userSchema.createJWT()
+        const token = user.createJWT()
         res.status(StatusCodes.CREATED).json({ name: user.name, token })
     }
     //login function
-    async login(req,res){
-        const {email , password} = req.body;
+    async login(req, res) {
+        const { email, password } = req.body;
         if (!email || !password) {
             throw new BadRequest('please provid email and password')
         }
-        const findEmail = await userSchema.findOne({ email })
-        if (!findEmail) {
+        const user = await userSchema.findOne({ email })
+        if (!user) {
             throw new Unauthorized('Invalid credentials')
         }
-        const isMatch = await userSchema.comparePassword(password)
+        const isMatch = await user.comparePassword(password)
         if (!isMatch) {
             throw new Unauthorized('Invalid credentials')
         }
-        const token = userSchema.createJWT()
+        const token = user.createJWT()
         res.status(StatusCodes.OK).json({ name: user.name, token })
     }
 }

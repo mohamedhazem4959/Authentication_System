@@ -1,5 +1,6 @@
 const mongodb = require('mongoose')
-
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const authSchema = new mongodb.Schema({
     name:{
         type:String,
@@ -24,6 +25,7 @@ authSchema.pre('save' , async function(){
 })
 
 authSchema.methods.createJWT = function(){
+
     return jwt.sign
     (
         {
