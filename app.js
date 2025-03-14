@@ -5,6 +5,7 @@ const app = express()
 //middleware
 const notFound = require('./middleware/notFound.js')
 const errorHandling = require('./middleware/errorHandling.js')
+const authentication = require('./middleware/authernecation.js')
 //import route
 const route = require('./routes/r-auth.js')
 //import connectDB function
@@ -18,7 +19,7 @@ const url = process.env.MONGO_URL
 app.use(express.json())
 
 //route
-app.use('/api/v1/auth' , route)
+app.use('/api/v1/auth',authentication , route)
 
 //middleware
 app.use(errorHandling)
