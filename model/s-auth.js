@@ -18,5 +18,25 @@ const authSchema = new mongodb.Schema({
         minlength:8
     }
 })
+authSchema.pre('save' , async function(){
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt)
+})
 
+authSchema.methods.createJWT = function(){
+    return jwt.sign
+    (
+        {
+            //payload
+            userName: this.name,
+            userID: this._id
+        },
+            // jwt secret
+            process.env.JWT_SECRET,
+            //options -> expires
+        {
+            expiresIn: '30d'
+        }
+    )
+}
 module.exports = mongodb.model('users' , authSchema)
