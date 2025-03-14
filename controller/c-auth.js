@@ -11,23 +11,8 @@ class Authentication {
         if (vaildEmail) {
             throw new BadRequest('this email is already registerd!')
         }
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt)
-        const user = await userSchema.create({
-            name,
-            email,
-            password: hashedPassword
-        });
-        const token = jwt.sign({
-            //payload
-            user: user.name,
-            email: user.email
-        },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: '30d'
-            }
-        )
+        const user = await userSchema.create({ ...req.body })
+        const token = userSchema.createJWT()
         res.status(StatusCodes.CREATED).json({ name: user.name, token })
     }
 }
